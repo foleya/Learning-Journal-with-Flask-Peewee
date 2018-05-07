@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+{% from 'macros.html' import render_field %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>MyJournal</title>
+        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="site-header">
+                  <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                  <a class="button icon-right" href={{ url_for('logout') }} title="Log Out"><span>Log Out</span><i class="material-icons">exit_to_app</i></a>
+                  <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span><i class="material-icons">add</i></a>
+                </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                      {% for category, message in messages %}
+                         <p style="text-align:center;">{{ message }}</p>
+                      {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <div class="new-entry">
+                    <h2>New Entry</h2>
+                    <form class="form" method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <label for="title">Title (required, must be unique)</label>
+                        <input id="title" type="text" name="title"><br>
+                        <label for="date">Date (required)</label>
+                        <input id="date" type="date" name="date"><br>
+                        <label for="time_spent">Time Spent</label>
+                        <input id="time_spent" type="text" name="time_spent"><br>
+                        <label for="what_i_learned">What I Learned</label>
+                        <textarea id="what_i_learned" rows="5" name="what_i_learned"></textarea>
+                        <label for="resources_to_remember">Resources to Remember (enter each website on a new line)</label>
+                        <textarea id="resources_to_remember" rows="5" name="resources_to_remember"></textarea>
+                        <label for="tags">Tags (separate tags with spaces)</label>
+                        <input id="tags" type="text" name="tags"><br>
+                        <input type="submit" value="Publish Entry" class="button">
+                        <a href="#" class="button button-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div>
+                &copy; MyJournal
+            </div>
+        </footer>
+    </body>
+</html>

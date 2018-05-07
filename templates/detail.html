@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>MyJournal</title>
+        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="site-header">
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href={{ url_for('logout') }} title="Log Out"><span>Log Out</span><i class="material-icons">exit_to_app</i></a>
+                    <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span><i class="material-icons">add</i></a>
+                </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                      {% for category, message in messages %}
+                         <p style="text-align:center;">{{ message }}</p>
+                      {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <div class="entry-list single">
+                    <article>
+                        <h1>{{ entry.title }}</h1>
+                        <time>{{ entry.date.strftime('%B %-d, %Y') }}</time>
+                        <div class="entry">
+                            <h3>Time Spent: </h3>
+                            <p>{{ entry.time_spent }}</p>
+                        </div>
+                        <div class="entry">
+                            <h3>What I Learned:</h3>
+                            <p>{{ entry.what_i_learned }}</p>
+                        <div class="entry">
+                            <h3>Resources to Remember:</h3>
+                            <ul>
+                                {% for resource in resources %}
+                                    <li>{{ resource }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="entry">
+                            <h3>Tags:</h3>
+                            <p>
+                            {% for tag in tags %}
+                                <a href="{{ url_for('index', tag=tag.tag) }}">{{ tag.tag }}</a>
+                            {% endfor %}
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="edit">
+                <p><a href="{{ url_for('edit_entry', slug=entry.slug) }}">Edit</a> or <a href="{{ url_for('delete_entry', slug=entry.slug) }}">Delete</a> Entry</p>
+            </div>
+
+        </section>
+        <footer>
+            <div>
+                &copy; MyJournal
+            </div>
+        </footer>
+    </body>
+</html>

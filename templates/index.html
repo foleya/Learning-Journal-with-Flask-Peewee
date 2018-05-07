@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>MyJournal</title>
+        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="site-header">
+                    <a class="logo" href="/"><i class="material-icons">library_books</i></a>
+                    <!-- Log in/log out -->
+                    {% if current_user.is_authenticated %}
+                      <a class="button icon-right" href={{ url_for('logout') }} title="Log Out"><span>Log Out</span><i class="material-icons">exit_to_app</i></a>
+                      <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span><i class="material-icons">add</i></a>
+                    {% else %}
+                      <a class="button icon-right" href={{ url_for('login') }}><span>Log In</span><i class="material-icons">lock_open</i></a>
+                      <a class="button icon-right" href={{ url_for('register') }}><span>Register</span><i class="material-icons">power_settings_new</i></a>
+                    {% endif %}
+                </div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                      {% for category, message in messages %}
+                         <p style="text-align:center;">{{ message }}</p>
+                      {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </header>
+        <section>
+            <div class="container">
+              {% if current_user.is_authenticated %}
+                <div class="entry-list">
+                  <article>
+                  </article>
+                  {% for entry in entries %}
+                    <article>
+                      <h2><a href="{{ url_for('detail', slug=entry.slug) }}">{{ entry.title }}</a></h2>
+                      <time>{{ entry.date.strftime('%m/%d/%Y') }}</time>
+                      <p class="article-tags">
+                        {% for tag in entry.tags %}
+                          <a href="{{ url_for('index', tag=tag.tag) }}">{{ tag.tag }}</a>
+                        {% endfor %}
+                      <p>
+                    </article>
+                  {% endfor %}
+                  <article>
+                    <h2>Tags:</h2>
+                    <p>(Click on a tag to filter results. Click <a href="{{ url_for('index') }}">here</a> to reset the filter.)</p>
+                    <p>
+                      {% for tag in tags %}
+                        <a href="{{ url_for('index', tag=tag.tag) }}">{{ tag.tag }}</a>
+                      {% endfor %}
+                    </p>
+                  </article>
+                </div>
+              {% else %}
+                <div class="entry-list">
+                  <article>
+                    <h2>Log in to see your journal entries!<h2>
+                  </article>
+                </div>
+              {% endif %}
+            </div>
+        </section>
+        <footer>
+            <div>
+                &copy; MyJournal
+            </div>
+        </footer>
+    </body>
+</html>
